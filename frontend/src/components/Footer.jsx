@@ -86,6 +86,7 @@ const Footer = () => {
               Support
             </button>
           )}
+          <div className="footer-spacer"></div>
           <ThemeToggle />
         </div>
       </div>
