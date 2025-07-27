@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Footer from './components/Footer';
+import InstallPrompt from './components/InstallPrompt';
 import Home from './components/Home';
 import SchoolPage from './components/SchoolPage';
 import ClassPage from './components/ClassPage';
@@ -14,6 +15,7 @@ function App() {
     <ThemeProvider>
       <Router>
         <div className="App">
+          <InstallPrompt />
           <div className="container">
             <Routes>
               <Route path="/" element={<Home />} />
