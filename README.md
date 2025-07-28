@@ -4,6 +4,9 @@
 
 School Scoop is a web application where students can anonymously share stories, confessions, rumors, and secrets about their school life. Post messages to crushes, enemies, or just share what's happening in your school - all completely anonymous!
 
+## 🚀 **Live Demo**
+https://schoolscoop.vercel.app
+
 ## ✨ Features
 
 ### 🏫 **School-Based Communities**
@@ -56,9 +59,6 @@ School Scoop is a web application where students can anonymously share stories, 
 - MongoDB Atlas (Cloud)
 - Collections: Schools, Rumors, Suggestions, Announcements
 - Indexed for performance
-
-## 🚀 **Live Demo**
-*Add your live URL here after deployment*
 
 ## 📱 **Mobile Optimized**
 Perfect for sharing on Instagram stories and mobile use!
