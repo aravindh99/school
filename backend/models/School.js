@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const schoolSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'School name is required'],
+    required: [true, 'Institution name is required'],
     trim: true,
-    minlength: [7, 'School name must be at least 7 characters'],
-    maxlength: [39, 'School name cannot exceed 39 characters']
+    minlength: [3, 'Institution name must be at least 3 characters'],
+    maxlength: [39, 'Institution name cannot exceed 39 characters']
   },
   city: {
     type: String,
@@ -14,6 +14,12 @@ const schoolSchema = new mongoose.Schema({
     trim: true,
     minlength: [3, 'City must be at least 3 characters'],
     maxlength: [14, 'City cannot exceed 14 characters']
+  },
+  type: {
+    type: String,
+    enum: ['school', 'college'],
+    required: [true, 'Institution type is required'],
+    default: 'school'
   },
   status: {
     type: String,
@@ -33,10 +39,13 @@ const schoolSchema = new mongoose.Schema({
   }
 });
 
-// Create default classes when school is approved
+// Create default classes when school is approved (only for schools, not colleges)
 schoolSchema.pre('save', function(next) {
-  if (this.status === 'approved' && this.classes.length === 0) {
+  if (this.status === 'approved' && this.type === 'school' && this.classes.length === 0) {
     this.classes = ['7', '8', '9', '10', '11', '12'];
+    this.approvedAt = new Date();
+  } else if (this.status === 'approved' && this.type === 'college') {
+    this.classes = []; // Colleges don't have classes
     this.approvedAt = new Date();
   }
   next();

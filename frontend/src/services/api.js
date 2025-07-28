@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://school-backend-lxc7.onrender.com/api';
+// Use localhost for development, deployed URL for production
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://school-backend-lxc7.onrender.com/api');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -20,7 +22,10 @@ api.interceptors.request.use((config) => {
 
 // Schools API
 export const schoolsAPI = {
-  getAll: () => api.get('/schools'),
+  getAll: (type) => {
+    const params = type ? { type } : {};
+    return api.get('/schools', { params });
+  },
   create: (data) => api.post('/schools', data),
   getRumors: (schoolId, classFilter) => {
     const params = classFilter ? { class: classFilter } : {};
@@ -40,7 +45,10 @@ export const adminAPI = {
 };
 
 // Individual function exports for component compatibility
-export const getSchools = () => schoolsAPI.getAll().then(res => res.data.data);
+export const getSchools = (type) => {
+  const params = type ? { type } : {};
+  return api.get('/schools', { params }).then(res => res.data.data);
+};
 export const getSchool = (schoolId) => api.get(`/schools/${schoolId}`).then(res => res.data.data);
 export const getRumors = (schoolId, classFilter) => schoolsAPI.getRumors(schoolId, classFilter).then(res => res.data.data);
 export const createRumor = (schoolId, data) => schoolsAPI.createRumor(schoolId, data).then(res => res.data.data);
@@ -62,5 +70,11 @@ export const deleteSuggestion = (suggestionId) => api.delete(`/admin/suggestions
 export const getAnnouncement = () => api.get('/schools/announcement').then(res => res.data.data);
 export const getAdminAnnouncement = () => api.get('/admin/announcement').then(res => res.data.data);
 export const updateAnnouncement = (content) => api.put('/admin/announcement', { content }).then(res => res.data.data);
+
+// Voting API
+export const voteOnRumor = (rumorId, voteType, userFingerprint) =>
+  api.post(`/schools/rumors/${rumorId}/vote`, { voteType, userFingerprint }).then(res => res.data.data);
+export const getUserVote = (rumorId, userFingerprint) =>
+  api.get(`/schools/rumors/${rumorId}/vote/${userFingerprint}`).then(res => res.data.data);
 
 export default api;

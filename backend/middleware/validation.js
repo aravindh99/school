@@ -17,8 +17,8 @@ const handleValidationErrors = (req, res, next) => {
 const validateSchool = [
   body('name')
     .trim()
-    .isLength({ min: 7, max: 39 })
-    .withMessage('School name must be between 7 and 39 characters'),
+    .isLength({ min: 3, max: 39 })
+    .withMessage('Institution name must be between 3 and 39 characters'),
   body('city')
     .trim()
     .isLength({ min: 3, max: 14 })
@@ -29,6 +29,7 @@ const validateSchool = [
 // Rumor validation rules
 const validateRumor = [
   body('class')
+    .optional()
     .isIn(['7', '8', '9', '10', '11', '12'])
     .withMessage('Invalid class selection'),
   body('content')

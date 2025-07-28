@@ -319,6 +319,50 @@ body {
   animation: fadeInUp 0.8s ease 0.4s both;
 }
 
+/* Navigation Tabs */
+.navigation-tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+.nav-tab {
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 25px;
+  border: 2px solid var(--border);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.nav-tab:hover::before {
+  left: 100%;
+}
+
+.nav-tab:hover {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -386,6 +430,366 @@ body {
 .school-stats {
   font-size: 0.8rem;
   color: var(--accent-primary);
+  font-weight: 500;
+}
+
+/* Institutions Pages */
+.institutions-page {
+  padding: 0.5rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
+.page-header h1 {
+  color: var(--text-primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.institutions-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+.institution-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 16px var(--shadow);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.institution-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.institution-card:hover::before {
+  transform: scaleX(1);
+}
+
+.institution-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px var(--shadow-hover);
+}
+
+.institution-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.institution-card p {
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.institution-stats {
+  font-size: 0.8rem;
+  color: var(--accent-primary);
+  font-weight: 500;
+}
+
+/* College Page */
+.college-page {
+  padding: 0.5rem;
+}
+
+.college-header {
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.college-header h1 {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.college-header p {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.create-thread-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Threads Section */
+.threads-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+}
+
+.threads-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.thread-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px var(--shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.thread-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.thread-card:hover::before {
+  transform: scaleX(1);
+}
+
+.thread-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--shadow-hover);
+}
+
+.thread-content p {
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  word-wrap: break-word;
+}
+
+.thread-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 0.8rem;
+}
+
+.thread-time-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.confession-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 0.8rem;
+  margin-top: 1rem;
+}
+
+.no-threads {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
+.no-threads p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Vote Buttons */
+.vote-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.vote-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vote-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+
+.vote-btn:hover::before {
+  left: 100%;
+}
+
+.vote-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.vote-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.upvote-btn:hover {
+  background: linear-gradient(135deg, var(--success), #22c55e);
+  color: white;
+  border-color: var(--success);
+}
+
+.upvote-btn.active {
+  background: linear-gradient(135deg, var(--success), #22c55e);
+  color: white;
+  border-color: var(--success);
+}
+
+.downvote-btn:hover {
+  background: linear-gradient(135deg, var(--danger), #f87171);
+  color: white;
+  border-color: var(--danger);
+}
+
+.downvote-btn.active {
+  background: linear-gradient(135deg, var(--danger), #f87171);
+  color: white;
+  border-color: var(--danger);
+}
+
+.vote-icon {
+  font-size: 0.9rem;
+}
+
+.vote-count {
+  font-weight: 500;
+  min-width: 1rem;
+  text-align: center;
+}
+
+/* Admin Form Styles */
+.create-institution-form {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
+.create-institution-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.create-institution-form .form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.create-institution-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.create-institution-form input,
+.create-institution-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.create-institution-form input:focus,
+.create-institution-form select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.create-institution-form small {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.create-institution-form .form-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.create-institution-form .form-actions .btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
@@ -461,11 +865,11 @@ body {
 
 .school-header, .class-header {
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 0.75rem 1rem;
   background: var(--bg-primary);
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 16px var(--shadow);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px var(--shadow);
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
@@ -477,21 +881,27 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
 }
 
 .school-header h1, .class-header h1 {
-  font-size: 1.4rem;
-  margin-bottom: 0.3rem;
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .school-header p, .class-header p {
   color: var(--text-secondary);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.school-header .btn, .class-header .btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
 }
 
 .back-link {
@@ -1441,40 +1851,7 @@ html {
   color: var(--accent-secondary);
 }
 
-/* Compact Headers */
-.school-header, .class-header {
-  text-align: center;
-  padding: 1rem;
-  background: var(--bg-primary);
-  border-radius: 16px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 20px var(--shadow);
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-}
 
-.school-header::before, .class-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-}
-
-.school-header h1, .class-header h1 {
-  font-size: 1.4rem;
-  margin-bottom: 0.25rem;
-  color: var(--text-primary);
-}
-
-.school-header p, .class-header p {
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
 
 /* Create Header Compact */
 .create-header {

@@ -12,39 +12,39 @@ router.post('/login', adminAuth, (req, res) => {
   });
 });
 
-// Get pending school requests
+// Get pending institution requests
 router.get('/schools/pending', requireAdmin, async (req, res) => {
   try {
-    const pendingSchools = await School.find({ status: 'pending' })
+    const pendingInstitutions = await School.find({ status: 'pending' })
       .sort({ createdAt: -1 });
     
     res.json({
       success: true,
-      data: pendingSchools
+      data: pendingInstitutions
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching pending schools',
+      message: 'Error fetching pending institutions',
       error: error.message
     });
   }
 });
 
-// Get all schools (for admin overview)
+// Get all institutions (for admin overview)
 router.get('/schools', requireAdmin, async (req, res) => {
   try {
-    const schools = await School.find()
+    const institutions = await School.find()
       .sort({ createdAt: -1 });
     
     res.json({
       success: true,
-      data: schools
+      data: institutions
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching schools',
+      message: 'Error fetching institutions',
       error: error.message
     });
   }
@@ -70,9 +70,13 @@ router.put('/schools/:id/approve', requireAdmin, async (req, res) => {
       });
     }
     
-    // Approve school and add classes
+    // Approve institution and add classes (only for schools)
     school.status = 'approved';
-    school.classes = ['7', '8', '9', '10', '11', '12'];
+    if (school.type === 'school') {
+      school.classes = ['7', '8', '9', '10', '11', '12'];
+    } else {
+      school.classes = []; // Colleges don't have classes
+    }
     school.approvedAt = new Date();
     
     await school.save();
@@ -304,10 +308,10 @@ router.delete('/schools/:id', requireAdmin, async (req, res) => {
   }
 });
 
-// Admin create school directly (auto-approved)
+// Admin create institution directly (auto-approved)
 router.post('/schools', requireAdmin, async (req, res) => {
   try {
-    const { name, city } = req.body;
+    const { name, city, type = 'school' } = req.body;
     
     if (!name || !city) {
       return res.status(400).json({
@@ -316,38 +320,54 @@ router.post('/schools', requireAdmin, async (req, res) => {
       });
     }
     
-    // Check if school already exists
-    const existingSchool = await School.findOne({ 
-      name: { $regex: new RegExp(name, 'i') },
-      city: { $regex: new RegExp(city, 'i') }
-    });
-    
-    if (existingSchool) {
+    if (!['school', 'college'].includes(type)) {
       return res.status(400).json({
         success: false,
-        message: 'School already exists'
+        message: 'Type must be either school or college'
       });
     }
     
-    const school = new School({
-      name: name.trim(),
-      city: city.trim(),
-      status: 'approved',
-      classes: ['7', '8', '9', '10', '11', '12'],
-      approvedAt: new Date()
+    // Check if institution already exists
+    const existingInstitution = await School.findOne({ 
+      name: { $regex: new RegExp(name, 'i') },
+      city: { $regex: new RegExp(city, 'i') },
+      type: type
     });
     
-    await school.save();
+    if (existingInstitution) {
+      return res.status(400).json({
+        success: false,
+        message: `${type.charAt(0).toUpperCase() + type.slice(1)} already exists`
+      });
+    }
+    
+    const institutionData = {
+      name: name.trim(),
+      city: city.trim(),
+      type: type,
+      status: 'approved',
+      approvedAt: new Date()
+    };
+    
+    // Only add classes for schools, not colleges
+    if (type === 'school') {
+      institutionData.classes = ['7', '8', '9', '10', '11', '12'];
+    } else {
+      institutionData.classes = [];
+    }
+    
+    const institution = new School(institutionData);
+    await institution.save();
     
     res.status(201).json({
       success: true,
-      message: 'School created successfully',
-      data: school
+      message: `${type.charAt(0).toUpperCase() + type.slice(1)} created successfully`,
+      data: institution
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Error creating school',
+      message: `Error creating ${req.body.type || 'institution'}`,
       error: error.message
     });
   }

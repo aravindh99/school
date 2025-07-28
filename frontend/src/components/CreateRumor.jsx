@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getSchool, createRumor } from '../services/api';
 
 const CreateRumor = () => {
-    const { schoolId, classNumber } = useParams();
+    const { schoolId, collegeId, classNumber } = useParams();
     const navigate = useNavigate();
-    const [school, setSchool] = useState(null);
+    const [institution, setInstitution] = useState(null);
     const [formData, setFormData] = useState({
         content: '',
         class: classNumber || '7'
@@ -13,19 +13,22 @@ const CreateRumor = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [charCount, setCharCount] = useState(0);
+    
+    const institutionId = schoolId || collegeId;
+    const isCollege = !!collegeId;
 
     useEffect(() => {
-        const fetchSchool = async () => {
+        const fetchInstitution = async () => {
             try {
-                const schoolData = await getSchool(schoolId);
-                setSchool(schoolData);
+                const institutionData = await getSchool(institutionId);
+                setInstitution(institutionData);
             } catch (err) {
-                setError('Failed to load school data');
+                setError(`Failed to load ${isCollege ? 'college' : 'school'} data`);
             }
         };
 
-        fetchSchool();
-    }, [schoolId]);
+        fetchInstitution();
+    }, [institutionId, isCollege]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,11 +58,16 @@ const CreateRumor = () => {
         setError(null);
 
         try {
-            await createRumor(schoolId, {
+            await createRumor(institutionId, {
                 content: formData.content.trim(),
-                class: formData.class
+                class: isCollege ? undefined : formData.class
             });
-            navigate(`/school/${schoolId}/class/${formData.class}`);
+            
+            if (isCollege) {
+                navigate(`/college/${collegeId}`);
+            } else {
+                navigate(`/school/${schoolId}/class/${formData.class}`);
+            }
         } catch (err) {
             setError('Failed to post confession');
             console.error('Error creating confession:', err);
@@ -68,20 +76,19 @@ const CreateRumor = () => {
         }
     };
 
-    if (!school) return <div className="loading">Loading...</div>;
-
-    const backUrl = classNumber ? `/school/${schoolId}/class/${classNumber}` : `/school/${schoolId}`;
+    if (!institution) return <div className="loading">Loading...</div>;
 
     return (
         <div className="create-rumor">
             <div className="create-header">
                 <h1>Share Anonymous Thread</h1>
+                <p>Posting to: {institution.name}</p>
             </div>
 
             {error && <div className="error">{error}</div>}
 
             <form onSubmit={handleSubmit} className="rumor-form">
-                {!classNumber && (
+                {!isCollege && !classNumber && (
                     <div className="form-group">
                         <label htmlFor="class">Class</label>
                         <select

@@ -26,7 +26,7 @@ const AdminPanel = () => {
   const [announcement, setAnnouncement] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showAnnouncementForm, setShowAnnouncementForm] = useState(false);
-  const [newSchool, setNewSchool] = useState({ name: '', city: '' });
+  const [newInstitution, setNewInstitution] = useState({ name: '', city: '', type: 'school' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -117,26 +117,26 @@ const AdminPanel = () => {
     }
   };
 
-  const handleCreateSchool = async (e) => {
+  const handleCreateInstitution = async (e) => {
     e.preventDefault();
 
-    if (newSchool.name.length < 7 || newSchool.name.length > 39) {
-      setError('School name must be between 7 and 39 characters');
+    if (newInstitution.name.length < 3 || newInstitution.name.length > 39) {
+      setError('Institution name must be between 3 and 39 characters');
       return;
     }
 
-    if (newSchool.city.length < 3 || newSchool.city.length > 14) {
+    if (newInstitution.city.length < 3 || newInstitution.city.length > 14) {
       setError('City must be between 3 and 14 characters');
       return;
     }
 
     try {
-      await adminCreateSchool(newSchool);
-      setNewSchool({ name: '', city: '' });
+      await adminCreateSchool(newInstitution);
+      setNewInstitution({ name: '', city: '', type: 'school' });
       setShowCreateForm(false);
       await fetchData(); // Refresh data
     } catch (err) {
-      setError('Failed to create school');
+      setError(`Failed to create ${newInstitution.type}`);
     }
   };
 
@@ -293,10 +293,10 @@ const AdminPanel = () => {
         )}
       </div>
 
-      {/* Create New School Section */}
+      {/* Create New Institution Section */}
       <div className="admin-section">
         <div className="section-header">
-          <h2>Create New School</h2>
+          <h2>Create New Institution</h2>
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="btn btn-primary btn-sm"
@@ -306,41 +306,56 @@ const AdminPanel = () => {
         </div>
 
         {showCreateForm && (
-          <form onSubmit={handleCreateSchool} className="create-school-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="schoolName">School Name</label>
-                <input
-                  type="text"
-                  id="schoolName"
-                  placeholder="Enter school name (7-39 characters)"
-                  value={newSchool.name}
-                  onChange={(e) => setNewSchool({ ...newSchool, name: e.target.value })}
-                  required
-                  minLength="7"
-                  maxLength="39"
-                />
-                <small>{newSchool.name.length}/39 characters</small>
-              </div>
-              <div className="form-group">
-                <label htmlFor="cityName">City</label>
-                <input
-                  type="text"
-                  id="cityName"
-                  placeholder="Enter city name (3-14 characters)"
-                  value={newSchool.city}
-                  onChange={(e) => setNewSchool({ ...newSchool, city: e.target.value })}
-                  required
-                  minLength="3"
-                  maxLength="14"
-                />
-                <small>{newSchool.city.length}/14 characters</small>
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="btn btn-primary">
-                  Create School
-                </button>
-              </div>
+          <form onSubmit={handleCreateInstitution} className="create-institution-form">
+            <div className="form-group">
+              <label htmlFor="institutionType">Type</label>
+              <select
+                id="institutionType"
+                value={newInstitution.type}
+                onChange={(e) => setNewInstitution({ ...newInstitution, type: e.target.value })}
+                required
+              >
+                <option value="school">School</option>
+                <option value="college">College</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="institutionName">
+                {newInstitution.type === 'school' ? 'School' : 'College'} Name
+              </label>
+              <input
+                type="text"
+                id="institutionName"
+                placeholder={`Enter ${newInstitution.type} name (3-39 characters)`}
+                value={newInstitution.name}
+                onChange={(e) => setNewInstitution({ ...newInstitution, name: e.target.value })}
+                required
+                minLength="3"
+                maxLength="39"
+              />
+              <small>{newInstitution.name.length}/39 characters</small>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="cityName">City</label>
+              <input
+                type="text"
+                id="cityName"
+                placeholder="Enter city name (3-14 characters)"
+                value={newInstitution.city}
+                onChange={(e) => setNewInstitution({ ...newInstitution, city: e.target.value })}
+                required
+                minLength="3"
+                maxLength="14"
+              />
+              <small>{newInstitution.city.length}/14 characters</small>
+            </div>
+            
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary">
+                Create {newInstitution.type === 'school' ? 'School' : 'College'}
+              </button>
             </div>
           </form>
         )}

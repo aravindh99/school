@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { schoolsAPI } from '../services/api';
 
-const CreateSchool = ({ isOpen, onClose, onSuccess, type = 'school' }) => {
+const CreateCollege = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: '',
     city: ''
@@ -22,12 +22,12 @@ const CreateSchool = ({ isOpen, onClose, onSuccess, type = 'school' }) => {
     setError(null);
 
     try {
-      await schoolsAPI.create({ ...formData, type });
+      await schoolsAPI.create({ ...formData, type: 'college' });
       setFormData({ name: '', city: '' });
-      onSuccess(`${type === 'college' ? 'College' : 'School'} request submitted for approval!`);
+      onSuccess('College request submitted for approval!');
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit school request');
+      setError(err.response?.data?.message || 'Failed to submit college request');
     } finally {
       setLoading(false);
     }
@@ -45,15 +45,15 @@ const CreateSchool = ({ isOpen, onClose, onSuccess, type = 'school' }) => {
     <div className="modal-overlay" onClick={handleClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Request New {type === 'college' ? 'College' : 'School'}</h2>
+          <h2>Request New College</h2>
           <button className="close-btn" onClick={handleClose}>×</button>
         </div>
 
-        {error && <div className="error">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="create-school-form">
+        <form onSubmit={handleSubmit} className="modal-form">
+          {error && <div className="error-message">{error}</div>}
+          
           <div className="form-group">
-            <label htmlFor="name">School Name</label>
+            <label htmlFor="name">College Name</label>
             <input
               type="text"
               id="name"
@@ -61,13 +61,10 @@ const CreateSchool = ({ isOpen, onClose, onSuccess, type = 'school' }) => {
               value={formData.name}
               onChange={handleChange}
               required
+              placeholder="Enter college name"
               minLength="3"
               maxLength="39"
-              placeholder="Enter school name (7-39 characters)"
             />
-            <div className="char-counter">
-              {formData.name.length}/39 characters
-            </div>
           </div>
 
           <div className="form-group">
@@ -79,13 +76,10 @@ const CreateSchool = ({ isOpen, onClose, onSuccess, type = 'school' }) => {
               value={formData.city}
               onChange={handleChange}
               required
+              placeholder="Enter city name"
               minLength="3"
               maxLength="14"
-              placeholder="Enter city name (3-14 characters)"
             />
-            <div className="char-counter">
-              {formData.city.length}/14 characters
-            </div>
           </div>
 
           <div className="form-actions">
@@ -93,25 +87,22 @@ const CreateSchool = ({ isOpen, onClose, onSuccess, type = 'school' }) => {
               type="button"
               onClick={handleClose}
               className="btn btn-secondary"
+              disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={loading}
               className="btn btn-primary"
+              disabled={loading}
             >
-              {loading ? 'Submitting...' : 'Submit'}
+              {loading ? 'Submitting...' : 'Submit Request'}
             </button>
           </div>
         </form>
-
-        <div className="info-message">
-          <p>Your school request will be reviewed by an administrator before being approved.</p>
-        </div>
       </div>
     </div>
   );
 };
 
-export default CreateSchool;
+export default CreateCollege;

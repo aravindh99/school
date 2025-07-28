@@ -8,7 +8,7 @@ const rumorSchema = new mongoose.Schema({
   },
   class: {
     type: String,
-    required: [true, 'Class is required'],
+    required: false, // Optional for colleges
     enum: ['7', '8', '9', '10', '11', '12']
   },
   content: {
@@ -17,6 +17,14 @@ const rumorSchema = new mongoose.Schema({
     trim: true,
     maxlength: [10000, 'Content cannot exceed 10000 characters'],
     minlength: [10, 'Content must be at least 10 characters long']
+  },
+  upvotes: {
+    type: Number,
+    default: 0
+  },
+  downvotes: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,

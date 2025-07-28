@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getSchool, getRumors } from '../services/api';
+import VoteButtons from './VoteButtons';
 
 const ClassPage = () => {
   const { schoolId, classNumber } = useParams();
@@ -8,29 +9,7 @@ const ClassPage = () => {
   const [rumors, setRumors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [expandedRumors, setExpandedRumors] = useState(new Set());
 
-  const toggleExpanded = (rumorId) => {
-    const newExpanded = new Set(expandedRumors);
-    if (newExpanded.has(rumorId)) {
-      newExpanded.delete(rumorId);
-    } else {
-      newExpanded.add(rumorId);
-    }
-    setExpandedRumors(newExpanded);
-  };
-
-  const truncateText = (text, maxLines = 2) => {
-    const words = text.split(' ');
-    const wordsPerLine = 8; // Approximate words per line
-    const maxWords = maxLines * wordsPerLine;
-    
-    if (words.length <= maxWords) {
-      return text;
-    }
-    
-    return words.slice(0, maxWords).join(' ') + '...';
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,32 +55,21 @@ const ClassPage = () => {
           </div>
         ) : (
           <div className="confessions-list">
-            {rumors.map(rumor => {
-              const isExpanded = expandedRumors.has(rumor._id);
-              const shouldTruncate = rumor.content.split(' ').length > 16;
-              
-              return (
+            {rumors.map(rumor => (
                 <div key={rumor._id} className="confession-card">
                   <div className="confession-content">
-                    {isExpanded || !shouldTruncate 
-                      ? rumor.content 
-                      : truncateText(rumor.content)
-                    }
-                    {shouldTruncate && (
-                      <button 
-                        className="expand-btn"
-                        onClick={() => toggleExpanded(rumor._id)}
-                      >
-                        {isExpanded ? 'Show less' : 'Show more'}
-                      </button>
-                    )}
+                    {rumor.content}
                   </div>
                   <div className="confession-meta">
                     <span>{new Date(rumor.createdAt).toLocaleDateString()}</span>
+                    <VoteButtons 
+                      rumorId={rumor._id}
+                      initialUpvotes={rumor.upvotes || 0}
+                      initialDownvotes={rumor.downvotes || 0}
+                    />
                   </div>
                 </div>
-              );
-            })}
+            ))}
           </div>
         )}
       </div>
