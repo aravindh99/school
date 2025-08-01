@@ -22,6 +22,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use('/api/ping', require('./routes/ping'));
 app.use('/api/schools', require('./routes/schools'));
 app.use('/api/admin', require('./routes/admin'));
 
